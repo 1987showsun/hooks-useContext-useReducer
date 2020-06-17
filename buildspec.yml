@@ -13,11 +13,11 @@ phases:
   pre_build:
     commands:
       - echo Installing dependencies...
-      - yarn
+      - npm i
   build:
     commands:
       - echo Building...
-      - yarn build
+      - npm run build
 artifacts:
   files:
     - "**/*"

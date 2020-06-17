@@ -1,25 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+/*
+ *   Copyright (c) 2020 
+ *   All rights reserved.
+ */
+import React                            from 'react';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+
+// Components
+import Nav                              from './components/nav';
+
+// Pages
+import Home                             from './pages/home';
+import About                            from './pages/about';
+
+// Contexts
+import Store                            from './context';
+
+// Stylesheets
 import './App.css';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Store>
+      <BrowserRouter>
+        <Nav />
+        <Switch>
+          <Route path="/" exact={true} component={Home} />
+          <Route path="/about" exact={false} component={About} />
+        </Switch>
+      </BrowserRouter>
+    </Store>
   );
 }
 

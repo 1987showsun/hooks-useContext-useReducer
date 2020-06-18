@@ -3,11 +3,12 @@
  *   All rights reserved.
  */
 import React, { useState, useContext } from 'react';
+import dayjs                           from 'dayjs';
 
 // Components
 import List                            from './components/list';
 
-import { contexts }                       from '../../context';
+import { contexts }                    from '../../context';
 
 const Index = () => {
 
@@ -36,19 +37,24 @@ const Index = () => {
         e.preventDefault();
         switch( actionType ){
             case 'ADD':
-                const ADD_NAME = form.name;
+                const ID         = `${dayjs().valueOf()}_${Math.floor(Math.random()*1000)}`;
+                const ADD_NAME   = form.name;
                 if( name.trim()!="" ){
-                    dispatch({ type: 'ADD_MEMBER', payload: ADD_NAME });
+                    dispatch({ 
+                        type     : 'ADD_MEMBER',
+                        id       : ID,
+                        name     : ADD_NAME
+                    });
                     setForm({
                         ...form,
-                        name: ""
+                        name     : ""
                     });
                 }
                 break;
 
             default:
                 const SEARCH_NAME = searchForm.name;
-                dispatch({ type: 'SEARCH_MEMBER', search: SEARCH_NAME });
+                dispatch({ type: 'SEARCH_MEMBER', keyword: SEARCH_NAME });
                 break;
         }
     }
@@ -66,7 +72,7 @@ const Index = () => {
                 <button type="submit">SEARCH</button>
             </form>
             <List 
-                condition = {searchForm.name}
+                keyword = {searchForm.name}
             />
         </div>
     )

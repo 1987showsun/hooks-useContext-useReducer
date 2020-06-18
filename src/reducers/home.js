@@ -13,28 +13,25 @@ export default (
     },
     action 
 ) => {
-    const { member } = state;
+    const { member }   = state;
+    const { id, name, keyword } = action;
     switch( action.type ){
         case 'ADD_MEMBER':
-            const mergeMember = [ ...member, action.payload];
+            const mergeMember = [ ...member, { id: id, name: name }];
             state = { ...state, member: mergeMember };
             break;
 
         case 'DELETE_MEMBER':
-            const FIND_INDEX   = action.payload;
-            const returnMember = deleteMembers( member, FIND_INDEX );
+            const returnMember = deleteMembers( member, id );
             state = { ...state, member: returnMember };
             break;
 
         case 'SEARCH_MEMBER':
-            const SEARCH_NAME = action.search;
-            state = { ...state, filterMember: searchMembers({member, name: SEARCH_NAME}) };
+            state = { ...state, filterMember: searchMembers({member, name: keyword}) };
             break;
 
         case 'UPDATE_MEMBER':
-            const name  = action.payload;
-            const index = action.index;
-            state = { ...state, member: updateMember({member, name, index}) };
+            state = { ...state, member: updateMember({member, name, id}) };
             break;
 
         default:

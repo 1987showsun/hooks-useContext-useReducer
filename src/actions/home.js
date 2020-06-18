@@ -5,22 +5,20 @@
 
 export const searchMembers = ({member, name}) => {
     return member.filter(item => {
-        if( item.indexOf(name)>-1 ){
+        if( item.name.indexOf(name)>-1 ){
             return true;
-        }else{
-            return false;
         }
     });
 }
 
-export const deleteMembers = ( member, FIND_INDEX ) => {
-    return member.filter((item,i) => i!=FIND_INDEX);
+export const deleteMembers = ( member, id ) => {
+    return member.filter((item,i) => item.id!=id);
 }
 
-export const updateMember = ({member, name, index}) => {
+export const updateMember = ({member, name, id}) => {
     return member.map((item,i) => {
-        if( i==index ){
-            item = name;
+        if( item.id==id ){
+            return { ...item, name: name };
         }
         return item;
     });

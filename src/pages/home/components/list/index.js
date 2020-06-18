@@ -6,14 +6,13 @@ import React, { useState, useContext, useEffect } from 'react';
 
 import { contexts }                    from '../../../../context';
 
-export default ({ condition }) => {
+export default ({ keyword }) => {
 
     const [ stateForm     , setForm      ] = useState({name: ""});
-    const [ stateFindIndex, setFindIndex ] = useState(-1);
+    const [ stateUpdateId , setUpdateId  ] = useState("");
+    const [ stateMember   , setMember    ] = useState([]);
     const [ state, dispatch ] = useContext(contexts);
     const { member, filterMember }       = state.home;
-    const renderMember     = filterMember.length!=0? filterMember:member;
-    console.log( state );
 
     const handleChange = ( e )   => {
         const { name, value } = e.target;
@@ -23,33 +22,44 @@ export default ({ condition }) => {
     const handleSubmit = ( e )   => {
         e.preventDefault();
         const { name } = stateForm;
-        dispatch({type: 'UPDATE_MEMBER', payload: name, index: stateFindIndex });
-        setFindIndex(-1);
+        dispatch({ type: 'UPDATE_MEMBER', name: name, id: stateUpdateId });
+        dispatch({ type: 'SEARCH_MEMBER', keyword });
+        setUpdateId("");
     }
 
     const handleRemove = ( val ) => {
-        dispatch({type: 'DELETE_MEMBER', payload: val});
+        const { id } = val;
+        dispatch({type: 'DELETE_MEMBER', id: id});
     }
+
+    useEffect(() => {
+        const renderMember = keyword!=""?(
+            filterMember
+        ):(
+            filterMember.length!=0? filterMember:member
+        );
+        setMember(renderMember);
+    },[member, filterMember]);
 
     const { name } = stateForm;
 
     return(
         <div className="list">
             {
-                renderMember.map((item,i) => {
+                stateMember.map((item,i) => {
                     return(
-                        <div key={i} className="items">
+                        <div key={item.id} className="items">
                             {
-                                stateFindIndex!=i? (
+                                stateUpdateId!=item.id? (
                                     <>
-                                        <div className="name">{item}</div>
+                                        <div className="name">{item.name}</div>
                                         <ul className="tool">
                                             <li>
                                                 <button
                                                     className="update"
-                                                    onClick={() =>{ 
-                                                        setFindIndex(i);
-                                                        setForm({name: item});
+                                                    onClick={() => {
+                                                        setUpdateId(item.id);
+                                                        setForm({name: item.name});
                                                     }}
                                                 >
                                                     編輯
@@ -58,7 +68,7 @@ export default ({ condition }) => {
                                             <li>
                                                 <button
                                                     className="remove"
-                                                    onClick={handleRemove.bind(this, i)}
+                                                    onClick={handleRemove.bind(this, item)}
                                                 >
                                                     刪除
                                                 </button>

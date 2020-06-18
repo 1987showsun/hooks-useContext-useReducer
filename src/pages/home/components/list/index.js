@@ -30,14 +30,16 @@ export default ({ keyword }) => {
     const handleRemove = ( val ) => {
         const { id } = val;
         dispatch({type: 'DELETE_MEMBER', id: id});
+        dispatch({ type: 'SEARCH_MEMBER', keyword });
     }
 
     useEffect(() => {
         const renderMember = keyword!=""?(
             filterMember
         ):(
-            filterMember.length!=0? filterMember:member
+            member
         );
+        console.log(  keyword!="" );
         setMember(renderMember);
     },[member, filterMember]);
 
